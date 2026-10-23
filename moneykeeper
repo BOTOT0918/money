@@ -1,0 +1,57 @@
+
+# 记账本（MoneyKeeper）
+
+简洁的安卓记账 App：Kotlin + SQLite 本地存储，无需联网，带桌面图标。
+
+## 功能
+- 记一笔：支出（餐饮/交通/购物）、收入（生活费/其他），金额/备注/日期
+- 按月统计：本月收入、本月支出、本月结余，可切换任意月份
+- 明细列表按日期倒序，长按删除
+- 绿色「¥」桌面图标
+
+## 如何安装到手机（拿到 APK 的两种方式）
+
+### 方式一：GitHub Actions 自动构建（推荐，不需要装任何环境）
+1. 在 GitHub 新建一个仓库，把本项目所有文件上传（或直接 `git push`）
+2. 打开仓库的 **Actions** 页面，工作流 "Build APK" 会自动运行
+3. 跑完后进入该工作流运行详情 → **Artifacts** → 下载 `moneykeeper-debug-apk`
+4. 把下载的 APK 传到安卓手机，点击安装（需在手机设置中允许“安装未知来源应用”）
+
+### 方式二：本地用 Android Studio 构建
+1. Android Studio 打开项目，等待 Gradle 同步完成
+2. 菜单 **Build → Build Bundle(s) / APK(s) → Build APK(s)**
+3. 完成后点提示中的 **locate**，得到 `app-debug.apk`，传到手机安装
+
+## 项目结构
+- `MainActivity.kt` — 主页：统计卡片 + 明细列表 + 记一笔对话框
+- `RecordAdapter.kt` — 明细列表适配器
+- `data/Record.kt` / `data/RecordDbHelper.kt` — 数据模型与 SQLite
+- `.github/workflows/build-apk.yml` — 自动构建 APK 的 CI 配置
+- `res/mipmap-*/ic_launcher.png` — 桌面图标
+
+
+org.gradle.jvmargs=-Xmx2048m
+android.useAndroidX=true
+kotlin.code.style=official
+android.nonTransitiveRClass=true
+
+
+// Top-level build file
+
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "MoneyKeeper"
+include(":app")
